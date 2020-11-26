@@ -133,6 +133,12 @@ const updateGreeting = async (req, res) => {
   const query = { _id };
 
   let bodyObject = { ...req.body };
+
+  const checker = Object.keys(bodyObject).some((key) => key === "hello");
+  if (!checker) return;
+
+  console.log(checker);
+
   Object.keys(bodyObject).forEach((key) => {
     if (key !== "hello") delete bodyObject.key;
   });
@@ -144,6 +150,9 @@ const updateGreeting = async (req, res) => {
     const db = await client.db("exercise_2");
 
     await db.collection("greetings").updateOne(query, newValues);
+
+    assert.equal(1, results.matchedCount);
+    assert.equal(1, results.modifiedCount);
 
     res.status(200).json({
       status: 200,
