@@ -64,7 +64,6 @@ const getGreeting = async (req, res) => {
 const getGreetings = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
   const { start, limit } = req.query;
-  console.log(start, limit);
 
   try {
     await client.connect();
@@ -135,7 +134,12 @@ const updateGreeting = async (req, res) => {
   let bodyObject = { ...req.body };
 
   const checker = Object.keys(bodyObject).some((key) => key === "hello");
-  if (!checker) return;
+  if (!checker) {
+    return res.status(500).json({
+      status: 500,
+      message: "failure",
+    });
+  }
 
   console.log(checker);
 
